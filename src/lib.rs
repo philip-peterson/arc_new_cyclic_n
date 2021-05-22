@@ -76,17 +76,16 @@ mod tests {
         let mut a = None;
         let mut b = None;
 
-        arc::new_cyclic_2(|weak_a, weak_b| {
+        let stored = arc::new_cyclic_2(|weak_a, weak_b| {
             a = Some(weak_a.clone());
             b = Some(weak_b.clone());
 
             (1, 2)
         });
 
-        // This should really be is_some() I think, but per https://github.com/rust-lang/rust/issues/75861#issuecomment-846326000
-        // it is a bug with the built in Arc::new_cyclic
-        // Ideally we would invert this test.
-        assert!(a.expect("Unwrap failed").upgrade().is_none());
+        assert_eq!(*a.expect("Failed to store").upgrade().expect("Upgrade failed"), 1);
+        assert_eq!(*b.expect("Failed to store").upgrade().expect("Upgrade failed"), 2);
+        drop(stored);
     }
 
     #[test]
@@ -116,12 +115,12 @@ mod tests {
     }
 
     #[test]
-    fn arc_new_cyclic_3_deferred_upgrades_fail() {
+    fn arc_new_cyclic_3_deferred_upgrades() {
         let mut a = None;
         let mut b = None;
         let mut c = None;
 
-        arc::new_cyclic_3(|weak_a, weak_b, weak_c| {
+        let stored = arc::new_cyclic_3(|weak_a, weak_b, weak_c| {
             a = Some(weak_a.clone());
             b = Some(weak_b.clone());
             c = Some(weak_c.clone());
@@ -129,9 +128,9 @@ mod tests {
             (1, 2, 3)
         });
 
-        // This should really be is_some() I think, but per https://github.com/rust-lang/rust/issues/75861#issuecomment-846326000
-        // it is a bug with the built in Arc::new_cyclic
-        // Ideally we would invert this test.
-        assert!(a.expect("Unwrap failed").upgrade().is_none());
+        assert_eq!(*a.expect("Failed to store").upgrade().expect("Upgrade failed"), 1);
+        assert_eq!(*b.expect("Failed to store").upgrade().expect("Upgrade failed"), 2);
+        assert_eq!(*c.expect("Failed to store").upgrade().expect("Upgrade failed"), 3);
+        drop(stored);
     }
 }
