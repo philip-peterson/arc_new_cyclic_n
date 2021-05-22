@@ -1,6 +1,8 @@
 [package]
 name = "arc_new_cyclic_n"
-version = "0.1.0"
+description = "Functions like Arc::new_cyclic but with arities greater than 1"
+license = "MIT"
+version = "1.0.0"
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
