@@ -1,6 +1,4 @@
 
-#![feature(arc_new_cyclic)]
-
 //! Functions like Arc::new_cyclic which work for a varied number of arguments
 pub mod arc {
     use std::sync::{Arc, Weak};
@@ -15,10 +13,10 @@ pub mod arc {
                 a = Some(a2);
                 b2
             }));
-            a.unwrap()
+            a.expect("invariant: set by closure")
         });
 
-        (a, b.unwrap())
+        (a, b.expect("invariant: set by closure"))
     }
 
     pub fn new_cyclic_3<A, B, C>(data_fn: impl FnOnce(&Weak<A>, &Weak<B>, &Weak<C>) -> (A, B, C)) -> (Arc<A>, Arc<B>, Arc<C>) {
@@ -35,12 +33,12 @@ pub mod arc {
                     b = Some(b2);
                     c2
                 }));
-                b.unwrap()
+                b.expect("invariant: set by closure")
             }));
-            a.unwrap()
+            a.expect("invariant: set by closure")
         });
 
-        (a, b.unwrap(), c.unwrap())
+        (a, b.expect("invariant: set by closure"), c.expect("invariant: set by closure"))
     }
 }
 
@@ -72,7 +70,7 @@ mod tests {
     }
 
     #[test]
-    fn arc_new_cyclic_2_deferred_upgrades_fail() {
+    fn arc_new_cyclic_2_deferred_upgrades() {
         let mut a = None;
         let mut b = None;
 
