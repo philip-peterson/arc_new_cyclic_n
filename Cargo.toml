@@ -2,7 +2,7 @@
 name = "arc_new_cyclic_n"
 description = "Functions like Arc::new_cyclic but with arities greater than 1"
 license = "MIT"
-version = "1.0.2"
+version = "1.0.3"
 edition = "2021"
 repository = "https://github.com/philip-peterson/arc_new_cyclic_n"
 readme = "README.md"
